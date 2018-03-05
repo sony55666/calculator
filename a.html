@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="main">
+        <p>濟既紀繼計算機</P>
+        <p>Calculator</p>
+        <div class="result">
+            <input type="text" id="text" value="0">
+        </div>
+        <div class="formula">
+            <button class="number" type="button" id="7" value="7" name="num">7</button>
+            <button class="number" type="button" id="8" value="8" name="num">8</button>
+            <button class="number" type="button" id="9" value="9" name="num">9</button>
+            <button class="operator" type="button" id="+" name="calc">+</button>
+            <br>
+            <button class="number" type="button" id="4" value="4" name="num">4</button>
+            <button class="number" type="button" id="5" value="5" name="num">5</button>
+            <button class="number" type="button" id="6" value="6" name="num">6</button>
+            <button class="operator" type="button" id="-" name="calc">-</button>
+            <br>
+            <button class="number" type="button" id="1" value="1" name="num">1</button>
+            <button class="number" type="button" id="2" value="2" name="num">2</button>
+            <button class="number" type="button" id="3" value="3" name="num">3</button>
+            <button class="operator" type="button" id="*" name="calc">*</button>
+            <br>
+            <button class="number" type="button" id="zero" value="0" name="num">0</button>
+            <button class="number" type="button" id="." value="." name="num">.</button>
+            <button class="operator" type="button" id="/" name="calc">/</button>
+            <br>
+            <button type="button" id="C" style="background-color:rgb(230, 88, 88)" name="clear">C</button>
+            <button type="button" name="del">→</button>
+            <button class="operator" id="result" style="background-color:rgb(91, 196, 223)" name="equal">=</button>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var a = '0', operator, countOp = 0;
+        var number = [];
+        var result = 0;
+        var count = '';
+        var C;
+        var is = false;
+        $('button[name=num]').click(function () {
+
+            var name = $(this).attr("value");
+
+            console.log(name)
+            if (a === '0' && name === '0') {
+                a = '0';
+            } else if (a === '0' && name !== '0' && name != '.') {
+                a = name;
+            } else {
+                if (name === '.') {
+                    if (!is) {
+                        a += name;
+                        is = true;
+                    } else {
+                        a += ''
+                    }
+                } else {
+                    a += name;
+                }
+
+
+            }
+            $("#text").val(a);
+
+        });
+        $('button[name=clear]').click(function () {
+            $("#text").val(0);
+            a = '0';
+            number = [];
+            result = 0;
+            is = false;
+        });
+        $('button[name=equal]').click(function () {
+            if (count !== '') {
+                number.push(a);
+                if (count != '' && number.length > 1) {
+                    var num1 = number.pop();
+                    var num2 = number.pop();
+                    console.log(number)
+                    switch (count) {
+                        case '+':
+                            result = parseFloat(num1) * 10000 + parseFloat(num2) * 10000;
+                            break;
+                        case '-':
+                            result = parseFloat(num2) * 10000 - parseFloat(num1) * 10000;
+                            break;
+                        case '*':
+                            result = parseFloat(num1) * 10000 * parseFloat(num2);
+                            break;
+                        case '/':
+                            result = parseFloat(num2) * 10000 / parseFloat(num1) * 10000;
+                            break;
+                    }
+                    result /= 10000;
+                    count = '';
+                    number.push(result);
+                    a = result;
+                    number = [];
+                }
+            }
+
+            $("#text").val(a);
+
+
+        });
+        $('button[name=del]').click(function () {
+            console.log(a);
+            console.log(a.toString().length)
+            a = a.toString().substr(0, a.toString().length - 1)
+            console.log(a.toString().length)
+            $("#text").val(a);
+
+        });
+        $('button[name=calc]').click(function () {
+
+            number.push(a);
+
+
+            if (count != '' && number.length > 1) {
+                var num1 = number.pop();
+                var num2 = number.pop();
+                switch (count) {
+                    case '+':
+                        result = parseFloat(num1) + parseFloat(num2);
+                        break;
+                    case '-':
+                        result = parseFloat(num2) - parseFloat(num1);
+                        console.log(result);
+                        break;
+                    case '*':
+                        result = parseFloat(num1) * parseFloat(num2);
+                        console.log(result);
+                        break;
+                    case '/':
+                        result = parseFloat(num2) / parseFloat(num1);
+                        console.log(result);
+                        break;
+                }
+                count = '';
+                number.push(result);
+                $("#text").val(function (index, oldvalue) {
+                    oldvalue = result;
+                    return oldvalue;
+                });
+                count = $(this).attr("id");
+            } else {
+                count = $(this).attr("id");
+            }
+            a = '0';
+
+        });
+
+    });
+
+
+
+</script>
